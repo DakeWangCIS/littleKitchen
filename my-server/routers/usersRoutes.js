@@ -1,20 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const studentController = require('../studentController/studentController.js');
+const userController = require('../controllers/userController.js');
 
 // define a router to retrieve all the students' information
-router.get('/', studentController.getAllStudents);
+router.get('/', userController.getAllUsers);
 
 // define a router to retrieve a student's information
-router.get('/:id', studentController.getStudentById);
+router.get('/:id', userController.getUserById);
 
 //  define a router to add a new student
-router.post("/", studentController.addStudent);
+router.post("/register", userController.register);
 
 // define a router to update a student's information
-router.put("/", studentController.updateStudent);
+router.put("/", userController.updateStudent);
 
 // define a router to delete a student
-router.delete("/:id", studentController.deleteStudent);
+router.delete("/:id", userController.deleteStudent);
 
 module.exports = router;
