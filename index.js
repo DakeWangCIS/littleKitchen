@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const PORT = 3001;
 const userRoutes = require('./my-server/routers/usersRoutes');
 const cors = require('cors');
 const loginRoutes = require('./my-server/routers/loginRoutes');
@@ -43,6 +44,6 @@ app.use('/users', userRoutes);
 //     }
 // });
 
-app.listen(3000, () => {
-    console.log('Server is running on port 3000.');
+app.listen(PORT, () => {
+    console.log('Server is running on port ' + PORT + '.');
 });

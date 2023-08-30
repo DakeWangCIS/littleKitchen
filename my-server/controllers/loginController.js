@@ -4,7 +4,7 @@ const pool = require('../config/databasePool.js');
 const jwtConfig = require('../config/jwtConfig.js');
 
 exports.login = async (req, res) => {
-    const { username, password } = req.body;
+    const { identifier: username, password } = req.body;
     const sql = 'SELECT * FROM user WHERE username = ? LIMIT 1';
     try {
         const [results] = await pool.execute(sql, [username]);
@@ -39,7 +39,7 @@ exports.login = async (req, res) => {
         });
         res.status(200).send({
             status: "ok",
-            data: {user_id: user.id, username: user.username},
+            data: {user_id: user.user_id, username: user.username, is_admin: user.is_admin},
             auth: true,
             token: token
         });

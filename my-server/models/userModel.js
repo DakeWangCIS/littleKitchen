@@ -1,6 +1,6 @@
 const dbPool = require('../config/databasePool');
 
-class User {
+class UserModel {
 
     // query the database for a user with the given username
     static async findOneByUsername(username) {
@@ -38,7 +38,7 @@ class User {
                 data.phone_number || null,
                 data.createDate || null,
                 data.lastLoginDate || null,
-                data.isAdmin || false
+                data.is_admin || false
             ]);
             await connection.commit();
             return result.insertId;
@@ -51,14 +51,14 @@ class User {
     }
 
     // update a user in the database
-    static async update(id, data) {
-        const [result] = await dbPool.execute('UPDATE user SET ? WHERE id = ?', [data, id]);
+    static async update(id, username, address, phone) {
+        const [result] = await dbPool.execute('UPDATE user SET username = ?, address = ?, phone_number = ? WHERE user_id = ?', [username, address, phone, id]);
         return result.affectedRows !== 0;
     }
 
     // delete a user from the database
     static async delete(id) {
-        const [result] = await dbPool.execute('DELETE FROM users WHERE id = ?', [id]);
+        const [result] = await dbPool.execute('DELETE FROM user WHERE user_id = ?', [id]);
         return result.affectedRows !== 0;
     }
 
@@ -69,5 +69,5 @@ class User {
     }
 }
 
-module.exports = User;
+module.exports = UserModel;
 

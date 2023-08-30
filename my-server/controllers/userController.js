@@ -1,4 +1,4 @@
-const User = require('../models/user');
+const User = require('../models/userModel');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const jwtConfig = require('../config/jwtConfig.js');
@@ -25,7 +25,7 @@ exports.getUserById = async (req, res) => {
     try {
         const user = await User.findById(+req.params.id);
         if (!user) {
-            return res.status(403).send({
+            return res.status(404).send({
                 status: "error",
                 message: "User not found."
             });
@@ -48,7 +48,7 @@ exports.getUserByName = async (req, res) => {
     try {
         const user = await User.findOneByUsername({where: {name: req.params.name}});
         if (!user) {
-            return res.status(403).send({
+            return res.status(404).send({
                 status: "error",
                 message: "User not found."
             });
@@ -67,13 +67,12 @@ exports.getUserByName = async (req, res) => {
 }
 
 // define a router to register a user
-// define a router to register a user
 exports.register = async (req, res) => {
     const {
         username,
         password,
         email,
-        address,
+        address = null,  // default to null if not provided
         phone = null,  // default to null if not provided
     } = req.body;
 
@@ -82,7 +81,7 @@ exports.register = async (req, res) => {
         !username || typeof username !== 'string' ||
         !password || typeof password !== 'string' ||
         !email || typeof email !== 'string' ||
-        !address || typeof address !== 'string' ||
+        (address && typeof address !== 'string') ||
         (phone && typeof phone !== 'string')
     ) {
         return res.status(403).send({
@@ -140,44 +139,51 @@ exports.register = async (req, res) => {
 };
 
 // define a router to delete a user
-exports.deleteStudent = (req, res) => {
-    const id = +req.params.id;
-    const index = STU_ARR.findIndex(stu => stu.id === id);
-    if (index === -1) {
-        res.status(403).send({
-            status: "error",
-            message: "Student not found."
-        });
-    } else {
-        STU_ARR.splice(index, 1);
+exports.deleteUser = async (req, res) => {
+    try {
+        const deletedUser = await User.delete(+req.params.id);
+        if (!deletedUser) {
+            return res.status(404).send({
+                status: "error",
+                message: "User not found."
+            });
+        }
         res.send({
             status: "ok",
-            message: "Student deleted.",
-            data: STU_ARR[index]
+            message: "User deleted.",
+            data: deletedUser
+        });
+    } catch (err) {
+        console.error('Error occurred during query:', err);
+        res.status(500).send({
+            status: "error",
+            message: "Error occurred during query."
         });
     }
 };
 
 // define a router to update a student
-exports.updateStudent = (req, res) => {
-    const {id, name, age, gender, address} = req.body;
-    const updatedStu = STU_ARR.find(stu => stu.id === id);
-
-    if (updatedStu) {
-        updatedStu.name = name;
-        updatedStu.age = age;
-        updatedStu.gender = gender;
-        updatedStu.address = address;
-
+exports.updateUser = async (req, res) => {
+    const { username, address, phone_number } = req.body;
+    const user_id = +req.params.id;
+    try {
+        const updatedUser = await User.update(user_id, username, address, phone_number);
+        if (!updatedUser) {
+            return res.status(404).send({
+                status: "error",
+                message: "User not found."
+            });
+        }
         res.send({
             status: "ok",
-            message: "Student updated.",
-            data: updatedStu
+            message: "User updated.",
+            data: updatedUser
         });
-    } else {
-        res.status(403).send({
+    } catch (err) {
+        console.error('Error occurred during query:', err);
+        res.status(500).send({
             status: "error",
-            message: "Student not found."
+            message: "Error occurred during query."
         });
     }
 };
