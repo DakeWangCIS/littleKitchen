@@ -26,6 +26,14 @@ const MainMenu = () => {
                         <li>
                             <Link to={"/profile"}>{auth.user.username}</Link>
                         </li>
+                        {
+                            auth.is_admin
+                                ? <li>
+                                    <Link to={"/all-users"}>All Registered Users</Link>
+                                </li>
+                                : null
+                        }
+
                         <li>
                             <Link to={"/"} onClick={
                                 () => {

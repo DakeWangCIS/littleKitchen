@@ -2,17 +2,19 @@ import React from 'react';
 import {useSelector} from "react-redux";
 import {Navigate, useLocation} from "react-router-dom";
 
-const NeedAuth = (props) => {
+const NeedAuth = ({requireAdmin = false, children}) => {
     const auth = useSelector(state => state.auth);
     const location = useLocation();
 
-    return auth.isLogged ?
-        props.children :
-        <Navigate
+    if (!auth.isLogged || (requireAdmin && !auth.is_admin)) {
+        return <Navigate
             to={"/auth-form"}
             replace
-            state={{preLocation: location}}
-        />
+            state={{ preLocation: location }}
+        />;
+    }
+
+    return children;
 };
 
 export default NeedAuth;

@@ -5,6 +5,7 @@ import ProfilePage from "./pages/ProfilePage";
 import Layout from "./components/Layout";
 import AuthPage from "./pages/AuthPage";
 import NeedAuth from "./components/NeedAuth";
+import UsersPage from "./pages/UsersPage";
 
 const App = () => {
     return (
@@ -15,6 +16,9 @@ const App = () => {
                     <NeedAuth><ProfilePage/></NeedAuth>
                 }/>
                 <Route path={"auth-form"} element={<AuthPage/>}/>
+                <Route path={"/all-users"} element={
+                    <NeedAuth requireAdmin={true}><UsersPage/></NeedAuth>
+                }/>
             </Routes>
         </Layout>
     );
