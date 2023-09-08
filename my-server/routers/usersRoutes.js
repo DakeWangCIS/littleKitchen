@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const authenticateToken = require('../middleware/authenticateToken');
 const userController = require('../controllers/userController.js');
 
 // define a router to retrieve all the users' information
-router.get('/', userController.getAllUsers);
+router.get('/', authenticateToken, userController.getAllUsers);
 
 // define a router to retrieve a user's information
 router.get('/:id', userController.getUserById);
