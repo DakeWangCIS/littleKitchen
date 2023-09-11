@@ -1,12 +1,12 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import React from 'react';
+import Carousel from "./Carousel";
 
 const Home = () => {
     return (
         <div>
-            <h2>This is Home Page</h2>
-            <p>This page can be accessed by anyone</p>
+            <Carousel/>
         </div>
     );
 };

@@ -1,11 +1,11 @@
 import React from 'react';
-import MainMenu from "./MainMenu";
+import Navbar from "./Navbar";
 
 const Layout = (props) => {
     return (
         <div>
-            <MainMenu/>
-            <hr/>
+            <Navbar/>
+            {/*<hr/>*/}
             {props.children}
         </div>
     );

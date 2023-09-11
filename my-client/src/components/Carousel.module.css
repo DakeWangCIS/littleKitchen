@@ -1,0 +1,64 @@
+/* Carousel.module.css */
+
+.carouselImage {
+    width: auto; /* 根据高度自动调整宽度 */
+    max-height: 400px; /* 限制图片的最大高度为400px */
+    display: block; /* 使图片居中 */
+    margin: 0 auto; /* 使图片居中 */
+}
+
+.carouselContainer {
+    max-width: 30%; /* 或者您想要的任何宽度 */
+    margin: 0 auto; /* 居中对齐 */
+    position: relative; /* 使其子元素的绝对定位有效 */
+}
+
+/* 添加以下样式以适应react-slick的默认样式 */
+.slick-slide img {
+    display: block;
+    margin: 0 auto;
+}
+
+:global(.slick-dots) {
+    margin-bottom: 40px;
+}
+
+:global(.slick-dots li button:before) {
+    color: #fff;
+    font-size: 10px;
+}
+
+:global(.slick-dots li.slick-active button:before) {
+    color: white;
+}
+
+.slick-dots {
+    transform: translateY(-20px);
+}
+
+:global(.slick-prev::before), :global(.slick-next::before) {
+    font-size: 26px; /* 例如：font-size: 30px; */
+}
+
+.arrow {
+    display: block;
+    width: 30px;
+    height: 30px;
+    color: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    cursor: pointer;
+    text-align: center;
+    line-height: 30px;  /* 使箭头垂直居中 */
+}
+
+.arrow.next {
+    right: 10px;
+}
+
+.arrow.prev {
+    left: 10px;
+}

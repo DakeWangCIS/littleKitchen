@@ -3,6 +3,8 @@ import {useLoginMutation, useRegisterMutation} from "../store/api/authApi";
 import {useDispatch} from "react-redux";
 import {login} from "../store/reducer/authSlice";
 import {useLocation, useNavigate} from "react-router-dom";
+import logo from '../assets/logo/logo_black.png';
+import styles from "./AuthForm.module.css";
 
 const AuthForm = () => {
     const [isLoginForm, setIsLoginForm] = useState(true);
@@ -59,39 +61,28 @@ const AuthForm = () => {
     }
 
     return (
-        <div>
-            <p style={{color:'red'}}>
-                {regError && "Username or email already exists."}
-                {loginError && "Username or password is incorrect."}
-            </p>
-            <h2>{isLoginForm ? "Log in" : "Register"}</h2>
+        <div className={styles.authContainer}>
+            <div className={styles.authLogo}>
+                <img src={logo} alt="logo" className={styles.logoImage} />
+            </div>
+            <div className={styles.authTabs}>
+                <button className={isLoginForm ? styles.activeTab : ""} onClick={() => setIsLoginForm(true)}>Sign In</button>
+                <button className={!isLoginForm ? styles.activeTab : ""} onClick={() => setIsLoginForm(false)}>Sign Up</button>
+            </div>
             <form onSubmit={submitHandler}>
-                <div>
-                    <input ref={usernameInput} type="text" placeholder={"Username"}/>
+                <div className={styles.authInputGroup}>
+                    <input ref={usernameInput} type="text" placeholder="Username" />
                 </div>
-                {
-                    !isLoginForm &&
-                    <div>
-                        <input ref={emailInput} type="email" placeholder={"email"}/>
+                {!isLoginForm && (
+                    <div className={styles.authInputGroup}>
+                        <input ref={emailInput} type="email" placeholder="Email" />
                     </div>
-                }
-                <div>
-                    <input ref={passwordInput} type="password" placeholder={"Password"}/>
+                )}
+                <div className={styles.authInputGroup}>
+                    <input ref={passwordInput} type="password" placeholder="Password" />
                 </div>
-                <div>
-                    <button>{isLoginForm ? "Log in" : "Register"}</button>
-                    <a href={"#"} onClick={
-                        (event) => {
-                            event.preventDefault();
-                            setIsLoginForm(!isLoginForm);
-                        }
-                    }>
-                        {
-                            isLoginForm ?
-                             "Don't have an account? Register here" :
-                             "Already have an account? Log in here"
-                        }
-                    </a>
+                <div className={styles.authActions}>
+                    <button type="submit">{isLoginForm ? "Log in" : "Register"}</button>
                 </div>
             </form>
         </div>
