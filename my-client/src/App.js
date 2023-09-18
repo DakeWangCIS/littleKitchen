@@ -8,6 +8,8 @@ import NeedAuth from "./components/NeedAuth";
 import UsersPage from "./pages/UsersPage";
 import OffersPage from "./pages/OffersPage";
 import MenusPage from "./pages/MenusPage";
+import 'semantic-ui-css/semantic.min.css';
+import './App.css';
 
 const App = () => {
     return (

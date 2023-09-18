@@ -1,87 +1,53 @@
-.logoImage {
-    width: 40px; /* 或您想要的任何其他宽度 */
-    /* 添加其他样式，如边距、高度等 */
-}
+/* AuthForm.module.css */
 
-.auth-tabs {
-    display: flex;
-    justify-content: center;
+.logo {
+    text-align: center;
     margin-bottom: 20px;
 }
 
-.auth-tabs button {
-    padding: 10px 20px;
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
+.logo img {
+    width: 100px;
+}
+
+label {
+    margin-left: 2em;  /* 添加左边距 */
+    padding: 0;        /* 确保没有内边距 */
     font-size: 16px;
-    border-bottom: 2px solid transparent;
-    margin: 0 10px;
-    transition: border-color 0.3s;
+    width: calc(100% - 4em)
 }
 
-.auth-tabs button.active-tab {
-    border-color: #f06511;
+.authTabs {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2em;
+    flex-direction: row;
+    height: 50px;
 }
 
-.auth-tabs button:hover {
-    border-color: #f06511;
-}
-
-.auth-container {
-    width: 300px;
-    margin: 50px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.auth-logo {
+.tab {
+    flex: 1;
     text-align: center;
-    margin-bottom: 20px;
-}
-
-.auth-logo img {
-    width: 100px; /* 或您想要的任何其他宽度 */
-}
-
-.auth-input-group {
-    margin-bottom: 15px;
-}
-
-.auth-input-group input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-}
-
-.auth-actions {
-    text-align: center;
-}
-
-.auth-actions button {
-    width: 100%;
-    padding: 10px;
-    background-color: #f06511;
-    color: white;
+    padding: 10px 0;
+    background-color: transparent;
     border: none;
-    border-radius: 5px;
+    border-bottom: 3px solid transparent;
+    font-size: 16px;
     cursor: pointer;
-    margin-bottom: 10px;
+    transition: border-color 0.3s, color 0.3s;
+    color: black;
 }
 
-.auth-actions button:hover {
-    background-color: #e05410;
+.tab:hover {
+    color: #f2711c;
 }
 
-.auth-actions a {
-    color: #f06511;
-    text-decoration: none;
+.activeTab {
+    border-bottom-color: #f2711c;
+    color: #f2711c;
+    font-weight: bold;
 }
 
-.auth-actions a:hover {
-    text-decoration: underline;
+.required {
+    color: red;
 }

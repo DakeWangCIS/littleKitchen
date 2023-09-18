@@ -1,11 +1,11 @@
 import React from 'react';
-import {Link, NavLink, useLocation, useNavigate} from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/reducer/authSlice";
-import styles from './Navbar.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faShoppingCart, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { Menu, Icon, Image, Button } from 'semantic-ui-react';
 import logo from '../assets/logo/logo_black.png';
+import styles from './Navbar.module.css';
+
 
 const Navbar = () => {
     const auth = useSelector(state => state.auth);
@@ -24,95 +24,52 @@ const Navbar = () => {
     const handleBackClick = () => {
         navigate(-1);
     }
+
     if (location.pathname === '/auth-form') {
         return (
-            <nav className={`${styles.navbar} navbar navbar-expand-lg navbar-light bg-white`}>
-                <div className="container-fluid">
-                    <FontAwesomeIcon
-                        icon={faArrowLeft}
-                        className={`${styles.clickableIcon} mr-3`}
-                        onClick={handleBackClick}
-                    />
-                </div>
-            </nav>
+            <Menu borderless className={styles.customNavbar}>
+                <Menu.Item onClick={handleBackClick}>
+                    <Icon name='arrow left' />
+                </Menu.Item>
+            </Menu>
         );
     }
 
     return (
-        <nav className={`${styles.navbar} navbar navbar-expand-lg navbar-light bg-white`}>
-            <div className="container-fluid">
-                <FontAwesomeIcon
-                    icon={faUser}
-                    className={`${styles.userIcon} ${styles.clickableIcon} mr-3`}
-                    onClick={handleUserIconClick}
-                />
-                <NavLink
-                    className={styles.navLink}
-                    to="/"
-                    style={({ isActive }) => ({
-                        color: isActive ? '#f06511' : 'black'
-                    })}
-                >
-                    Home
-                </NavLink>
-                <NavLink
-                    className={styles.navLink}
-                    to="/offers"
-                    style={({ isActive }) => ({
-                        color: isActive ? '#f06511' : 'black'
-                    })}
-                >
-                    Offers
-                </NavLink>
-                <NavLink
-                    className={styles.navLink}
-                    to="/menus"
-                    style={({ isActive }) => ({
-                        color: isActive ? '#f06511' : 'black'
-                    })}
-                >
-                    Menu
-                </NavLink>
+        <Menu borderless className={styles.customNavbar}>
+            <Menu.Menu style={{ flex: 1 }}>
+                <Menu.Item onClick={handleUserIconClick}>
+                    <Icon name='user' />
+                </Menu.Item>
+                <Menu.Item as={Link} to="/">Home</Menu.Item>
+                <Menu.Item as={Link} to="/offers">Offers</Menu.Item>
+                <Menu.Item as={Link} to="/menus">Menu</Menu.Item>
+                {auth.isLogged &&
+                    <>
+                        <Menu.Item as={Link} to="/profile">{auth.user.username}</Menu.Item>
+                        {auth.is_admin &&
+                            <Menu.Item as={Link} to="/all-users">All Registered Users</Menu.Item>
+                        }
+                        <Menu.Item as={Link} to="/" onClick={() => dispatch(logout())}>Logout</Menu.Item>
+                    </>
+                }
+            </Menu.Menu>
 
-                <div className="mx-auto">
-                    <Link to="/">
-                        <img src={logo} alt="Little Kitchen" className={styles.logoImage} />
-                    </Link>
-                </div>
-                <ul className="navbar-nav">
-                    <li className="nav-item">
-                        <Link className={styles.customOrangeBg} to="/auth-form">Sign Up</Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link className={styles.emptyCart} to="/cart">
-                            <FontAwesomeIcon icon={faShoppingCart} className={`${styles.cartIcon}`} />$0.00
-                        </Link>
-                    </li>
-                    {auth.isLogged &&
-                        <>
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/profile">{auth.user.username}</Link>
-                            </li>
-                            {auth.is_admin &&
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/all-users">All Registered Users</Link>
-                                </li>
-                            }
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/" onClick={() => dispatch(logout())}>Logout</Link>
-                            </li>
-                        </>
-                    }
-                </ul>
-            </div>
-        </nav>
+            <Menu.Item style={{ flex: 1, textAlign: 'center' }}>
+                <Image centered src={logo} alt="Little Kitchen" size='mini' />
+            </Menu.Item>
+
+            <Menu.Menu style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
+                <Menu.Item as={Link} to="/auth-form">
+                    <Button basic color='orange'>Sign Up</Button>
+                </Menu.Item>
+                <Menu.Item as={Link} to="/cart">
+                    <Icon name='shopping cart' />$0.00
+                </Menu.Item>
+
+            </Menu.Menu>
+        </Menu>
     );
 };
 
 export default Navbar;
-
-{/*{!auth.isLogged &&*/}
-{/*    <li className="nav-item">*/}
-{/*        <Link className="nav-link" to="/auth-form">Login/Register</Link>*/}
-{/*    </li>*/}
-{/*}*/}

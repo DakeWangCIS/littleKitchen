@@ -1,84 +1,15 @@
-.customOrange {
-    color: #f06511;
-    text-decoration: none;
+.customNavbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    height: 70px !important; /* 或者您希望的任何其他高度 */
 }
 
-.customOrangeBg {
-    color: #f06511;
-    border: 1px solid #f06511;
-    background-color: white;
-    border-radius: 20px;
-    padding: 0px 15px;
-    transition: background-color 0.3s, color 0.3s;
-    text-decoration: none;
-    margin-right: 10px;
-}
-
-.customOrangeBg:hover {
-    background-color: #fee3d1;
-}
-
-.customOrangeBg, .emptyCart {
-    width: 100px;
-    display: inline-block;
-    font-size: 12px;
-    height: 40px; /* 调整高度 */
-    line-height: 40px; /* 使文本垂直居中 */
-    justify-content: center;
-    text-align: center; /* 使文本水平居中 */
-    font-weight: bold;
-    vertical-align: middle;
-}
-
-.emptyCart {
-    color: #a9a9a9;
-    border: 1px solid #a9a9a9;
-    background-color: white;
-    border-radius: 20px;
-    padding: 0 15px;
-    text-decoration: none;
-    pointer-events: none; /* 禁用悬停效果 */
-    margin-right: 20px;
-    width: 100px;
-}
-
-.emptyCart:hover {
-    background-color: #f2f2f2;
-}
-
-.cartIcon {
-    color: #a9a9a9; /* 设置购物车图标的颜色 */
-    vertical-align: middle;
-    margin-right: 5px;
-    margin-bottom: 0;
-}
-
-.navbar {
-    flex-direction: column;
-    border-bottom: 1px solid #ccc;
-    height: 70px; /* 或您想要的任何其他高度 */
-    align-items: center; /* 使内容水平居中 */
-    justify-content: center; /* 使内容垂直居中 */
-}
-
-.userIcon {
-    margin-right: 20px;
-    margin-left: 20px;
-}
-
-.navLink {
-    margin-right: 20px;
-    font-size: 14px;
-    font-weight: bold;
-    text-decoration: none;
-    color: black;
-}
-
-.logoImage {
-    width: 40px; /* 或您想要的任何其他宽度 */
-    /* 添加其他样式，如边距、高度等 */
-}
-
-.clickableIcon {
-    cursor: pointer;
+.navbarStyle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    height: 70px;
 }

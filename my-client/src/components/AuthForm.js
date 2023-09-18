@@ -3,8 +3,9 @@ import {useLoginMutation, useRegisterMutation} from "../store/api/authApi";
 import {useDispatch} from "react-redux";
 import {login} from "../store/reducer/authSlice";
 import {useLocation, useNavigate} from "react-router-dom";
+import {Button, Form, Segment, Container, Checkbox} from 'semantic-ui-react';
 import logo from '../assets/logo/logo_black.png';
-import styles from "./AuthForm.module.css";
+import styles from './AuthForm.module.css';
 
 const AuthForm = () => {
     const [isLoginForm, setIsLoginForm] = useState(true);
@@ -31,7 +32,7 @@ const AuthForm = () => {
         event.preventDefault();
         const username = usernameInput.current.value;
         const password = passwordInput.current.value;
-        if(isLoginForm) {
+        if (isLoginForm) {
             loginFn({
                 identifier: username,
                 password
@@ -59,33 +60,98 @@ const AuthForm = () => {
                 })
         }
     }
-
     return (
-        <div className={styles.authContainer}>
-            <div className={styles.authLogo}>
-                <img src={logo} alt="logo" className={styles.logoImage} />
+        <Container>
+            <div className={styles.logo}>
+                <img src={logo} alt="logo"/>
             </div>
-            <div className={styles.authTabs}>
-                <button className={isLoginForm ? styles.activeTab : ""} onClick={() => setIsLoginForm(true)}>Sign In</button>
-                <button className={!isLoginForm ? styles.activeTab : ""} onClick={() => setIsLoginForm(false)}>Sign Up</button>
-            </div>
-            <form onSubmit={submitHandler}>
-                <div className={styles.authInputGroup}>
-                    <input ref={usernameInput} type="text" placeholder="Username" />
-                </div>
-                {!isLoginForm && (
-                    <div className={styles.authInputGroup}>
-                        <input ref={emailInput} type="email" placeholder="Email" />
+            <Segment style={{
+                width: '100%',
+                maxWidth: '480px',
+                margin: '0 auto',
+                padding: 0,
+                backgroundColor: '#fff',
+                borderRadius: '30px 30px 10px 10px',
+                border: 'none',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                height: '640px'
+            }}>
+                <div className={styles.authTabs}>
+                    <div
+                        className={!isLoginForm ? `${styles.tab} ${styles.activeTab}` : styles.tab}
+                        onClick={() => setIsLoginForm(false)}
+                    >
+                        Sign Up
                     </div>
-                )}
-                <div className={styles.authInputGroup}>
-                    <input ref={passwordInput} type="password" placeholder="Password" />
+                    <div
+                        className={isLoginForm ? `${styles.tab} ${styles.activeTab}` : styles.tab}
+                        onClick={() => setIsLoginForm(true)}
+                    >
+                        Sign In
+                    </div>
+
                 </div>
-                <div className={styles.authActions}>
-                    <button type="submit">{isLoginForm ? "Log in" : "Register"}</button>
-                </div>
-            </form>
-        </div>
+                <Form onSubmit={submitHandler}>
+                    <label>
+                        Username <span className={styles.required}>*</span>
+                        <Form.Input
+                            fluid
+                            icon='user'
+                            iconPosition='left'
+                            placeholder='Username'
+                            input={{ref: usernameInput}}
+                            style={{ marginLeft: '2em', marginRight: '2em', marginBottom: '1.5em', marginTop: '0.5em', width: 'calc(100% - 4em)' }}
+                        />
+                    </label>
+                    {!isLoginForm && (
+                        <label>
+                            Email <span className={styles.required}>*</span>
+                            <Form.Input
+                                fluid
+                                icon='mail'
+                                iconPosition='left'
+                                placeholder='Email address'
+                                input={{ref: emailInput}}
+                                style={{ marginLeft: '2em', marginRight: '2em', marginBottom: '1.5em', marginTop: '0.5em', width: 'calc(100% - 4em)' }}
+                            />
+                        </label>
+                    )}
+                    <label>
+                        Password <span className={styles.required}>*</span>
+                        <Form.Input
+                            fluid
+                            icon='lock'
+                            iconPosition='left'
+                            placeholder='Password'
+                            type='password'
+                            input={{ref: passwordInput}}
+                            style={{ marginLeft: '2em', marginRight: '2em', marginBottom: '1.5em', marginTop: '0.5em', width: 'calc(100% - 4em)' }}
+                        />
+                    </label>
+                    {!isLoginForm && (
+                        <Form.Field>
+                            <Checkbox
+                                label='I want to receive special offers and other information from Popeyes via email'
+                            />
+                        </Form.Field>
+                    )}
+                    <Button color='orange'
+                            fluid size='large'
+                            type="submit"
+                            style={{
+                                marginTop: '2em',
+                                marginBottom: '4em',
+                                marginLeft: '2em',
+                                marginRight: '2em',
+                                width: 'calc(100% - 4em)',
+                                borderRadius: '30px'
+                            }}
+                            >
+                        {isLoginForm ? "Log in" : "Register"}
+                    </Button>
+                </Form>
+            </Segment>
+        </Container>
     );
 };
 

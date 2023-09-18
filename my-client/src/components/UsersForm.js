@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useGetUserByIdQuery, useGetUsersQuery, useUpdateUserMutation, useDeleteUserMutation} from "../store/api/userApi";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import styles from "./UsersForm.module.css";
 
 const UsersForm = () => {
     const [formData, setFormData] = useState({});
@@ -22,6 +22,13 @@ const UsersForm = () => {
             setFormData(editingUserData.data);
         }
     }, [editingUserData]);
+
+    useEffect(() => {
+        if (error) {
+            console.error("API Error:", error);
+        }
+    }, [error]);
+
 
     const handleEdit = async () => {
         const updatedUser = {};
@@ -52,13 +59,13 @@ const UsersForm = () => {
     };
 
     return (
-        <div className="container">
+        <div className={styles.container}>
             {isLoading && <div>Loading...</div>}
             {error && <div>Error loading users: {error.message}</div>}
             {updateError && <div>Error updating user: {updateError.message}</div>}
             {deleteError && <div>Error deleting user: {deleteError.message}</div>}
             {data && (
-                <table className="table">
+                <table className={styles.table}>
                     <thead>
                     <tr>
                         <th style={{width: '100px'}}>User ID</th>
@@ -84,12 +91,12 @@ const UsersForm = () => {
                             <td>{dateInPacificTime(user.last_login_date)}</td>
                             <td>{user.is_admin ? 'Yes' : 'No'}</td>
                             <td>
-                                <div className="d-flex">
+                                <div className={styles.dFlex}>
                                     <button
-                                        className="btn btn-primary"
+                                        className={styles.btnPrimary}
                                         style={{marginRight: '8px'}}
                                         onClick={() => setEditingUserId(user.user_id)}>Edit</button>
-                                    <button className="btn btn-danger"
+                                    <button className={styles.btnDanger}
                                             onClick={() => setDeleteConfirm(user.user_id)}>Delete</button>
                                 </div>
                             </td>
@@ -101,19 +108,19 @@ const UsersForm = () => {
 
             {/* delete confirmation modal */}
             {deleteConfirm !== null && (
-                <div className="modal show d-block">
-                    <div className="modal-dialog">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">Confirm Delete</h5>
-                                <button type="button" className="btn-close" onClick={() => setDeleteConfirm(null)}></button>
+                <div className={styles.modal}>
+                    <div className={styles.modalDialog}>
+                        <div className={styles.modalContent}>
+                            <div className={styles.modalHeader}>
+                                <h5 className={styles.modalTitle}>Confirm Delete</h5>
+                                <button type="button" className={styles.btnClose} onClick={() => setDeleteConfirm(null)}></button>
                             </div>
-                            <div className="modal-body">
+                            <div className={styles.modalBody}>
                                 <p>Are you sure you want to delete this user?</p>
                             </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" onClick={() => setDeleteConfirm(null)}>Cancel</button>
-                                <button type="button" className="btn btn-danger" onClick={handleDelete}>Confirm</button>
+                            <div className={styles.modalFooter}>
+                                <button type="button" className={styles.btnSecondary} onClick={() => setDeleteConfirm(null)}>Cancel</button>
+                                <button type="button" className={styles.btnDanger} onClick={handleDelete}>Confirm</button>
                             </div>
                         </div>
                     </div>
@@ -121,36 +128,36 @@ const UsersForm = () => {
             )}
 
             {editingUserId !== null && (
-                <div className="modal show d-block">
-                    <div className="modal-dialog">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">Edit User</h5>
-                                <button type="button" className="btn-close" onClick={() => setEditingUserId(null)}></button>
+                <div className={styles.modal}>
+                    <div className={styles.modalDialog}>
+                        <div className={styles.modalContent}>
+                            <div className={styles.modalHeader}>
+                                <h5 className={styles.modalTitle}>Edit User</h5>
+                                <button type="button" className={styles.btnClose} onClick={() => setEditingUserId(null)}></button>
                             </div>
-                            <div className="modal-body">
+                            <div className={styles.modalBody}>
                                 {editingUserData && (
                                     <form>
                                         {/* Your form fields here. Use editingUserData to populate the fields. */}
                                         <div className="mb-3">
-                                            <label htmlFor="username" className="form-label">Username:</label>
+                                            <label htmlFor="username" className={styles.formLabel}>Username:</label>
                                             {/*username, email, address, phone_number*/}
-                                            <input type={"text"} className={"form-control"} id={"username"}
+                                            <input type={"text"} className={styles.formControl} id={"username"}
                                                    value={formData.username || ''}
                                                    onChange={(e) => setFormData({...formData, username: e.target.value})}
                                             />
-                                            <label htmlFor="email" className="form-label">Email:</label>
-                                            <input type={"text"} className={"form-control"} id={"email"}
+                                            <label htmlFor="email" className={styles.formLabel}>Email:</label>
+                                            <input type={"text"} className={styles.formControl} id={"email"}
                                                    value={formData.email || ''}
-                                                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                                                   onChange={(e) => setFormData({...formData, email: e.target.value})}
                                             />
-                                            <label htmlFor="address" className="form-label">Address:</label>
-                                            <input type={"text"} className={"form-control"} id={"address"}
+                                            <label htmlFor="address" className={styles.formLabel}>Address:</label>
+                                            <input type={"text"} className={styles.formControl} id={"address"}
                                                    value={formData.address || ''}
                                                    onChange={(e) => setFormData({...formData, address: e.target.value})}
                                             />
-                                            <label htmlFor="phone_number" className="form-label">Phone Number:</label>
-                                            <input type={"text"} className={"form-control"} id={"phone_number"}
+                                            <label htmlFor="phone_number" className={styles.formLabel}>Phone Number:</label>
+                                            <input type={"text"} className={styles.formControl} id={"phone_number"}
                                                    value={formData.phone_number || ''}
                                                    onChange={(e) => setFormData({...formData, phone_number: e.target.value})}
                                             />
@@ -158,9 +165,9 @@ const UsersForm = () => {
                                     </form>
                                 )}
                             </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" onClick={() => setEditingUserId(null)}>Close</button>
-                                <button type="button" className="btn btn-primary" onClick={handleEdit}>Save changes</button>
+                            <div className={styles.modalFooter}>
+                                <button type="button" className={styles.btnSecondary} onClick={() => setEditingUserId(null)}>Close</button>
+                                <button type="button" className={styles.btnPrimary} onClick={handleEdit}>Save changes</button>
                             </div>
                         </div>
                     </div>
