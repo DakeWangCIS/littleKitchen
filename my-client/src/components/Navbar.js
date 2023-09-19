@@ -46,9 +46,8 @@ const Navbar = () => {
                 <Menu.Item as={Link} to="/menus">Menu</Menu.Item>
                 {auth.isLogged &&
                     <>
-                        <Menu.Item as={Link} to="/profile">{auth.user.username}</Menu.Item>
                         {auth.is_admin &&
-                            <Menu.Item as={Link} to="/all-users">All Registered Users</Menu.Item>
+                            <Menu.Item as={Link} to="/all-users">User Management</Menu.Item>
                         }
                         <Menu.Item as={Link} to="/" onClick={() => dispatch(logout())}>Logout</Menu.Item>
                     </>
