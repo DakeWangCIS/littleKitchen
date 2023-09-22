@@ -1,6 +1,6 @@
 const User = require('../models/userModel');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
+const bcryptjs = require('bcryptjs');
 const jwtConfig = require('../config/jwtConfig.js');
 
 // define a function to retrieve all the users' information
@@ -104,7 +104,7 @@ exports.register = async (req, res) => {
             });
         }
 
-        const hashedPassword = bcrypt.hashSync(password, 8);
+        const hashedPassword = bcryptjs.hashSync(password, 8);
 
         const results = await User.create({
             username,
