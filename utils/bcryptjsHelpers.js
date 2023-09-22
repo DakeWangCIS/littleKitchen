@@ -1,12 +1,12 @@
-const bcrypt = require('bcrypt');
+const bcryptjs = require('bcryptjs');
 
 function hashPassword(password, callback) {
     const saltRounds = 10;
-    bcrypt.hash(password, saltRounds, callback);
+    bcryptjs.hash(password, saltRounds, callback);
 }
 
 function comparePassword(plainPassword, hash, callback) {
-    bcrypt.compare(plainPassword, hash, callback);
+    bcryptjs.compare(plainPassword, hash, callback);
 }
 
 module.exports = {

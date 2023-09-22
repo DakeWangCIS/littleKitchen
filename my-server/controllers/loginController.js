@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
+const bcryptjs = require('bcryptjs');
 const pool = require('../config/databasePool.js');
 const jwtConfig = require('../config/jwtConfig.js');
 
@@ -19,7 +19,7 @@ exports.login = async (req, res) => {
         }
 
         const user = results[0];
-        const passwordIsValid = bcrypt.compareSync(password, user.password);
+        const passwordIsValid = bcryptjs.compareSync(password, user.password);
 
         if (!passwordIsValid) {
             return res.status(403).send({
