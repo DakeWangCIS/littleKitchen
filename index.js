@@ -5,6 +5,7 @@ const cors = require('cors');
 const userRoutes = require('./my-server/routers/usersRoutes');
 const loginRoutes = require('./my-server/routers/loginRoutes');
 const itemRoutes = require('./my-server/routers/itemRoutes');
+const categoryRoutes = require('./my-server/routers/categoryRoutes');
 const authenticateToken = require('./my-server/middleware/authenticateToken');
 
 const corsOptions = {
@@ -23,6 +24,8 @@ app.use('/', loginRoutes);
 app.use('/users', userRoutes);
 // import the router from itemRoutes.js
 app.use('/items', itemRoutes);
+// import the router from categoryRoutes.js
+app.use('/categories', categoryRoutes);
 
 app.listen(PORT, () => {
     console.log('Server is running on port ' + PORT + '.');
