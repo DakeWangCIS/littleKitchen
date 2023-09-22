@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const jwtConfig = require('../config/jwtConfig.js');
 
-// define a router to retrieve all the users' information
+// define a function to retrieve all the users' information
 exports.getAllUsers = async (req, res) => {
     try {
         const allUsers = await User.findAll();
@@ -20,7 +20,7 @@ exports.getAllUsers = async (req, res) => {
     }
 };
 
-// define a router to retrieve a user's information by id
+// define a function to retrieve a user's information by id
 exports.getUserById = async (req, res) => {
     try {
         const user = await User.findById(+req.params.id);
@@ -43,7 +43,7 @@ exports.getUserById = async (req, res) => {
     }
 };
 
-// define a router to retrieve a user's information by name
+// define a function to retrieve a user's information by name
 exports.getUserByName = async (req, res) => {
     try {
         const user = await User.findOneByUsername({where: {name: req.params.name}});
@@ -66,7 +66,7 @@ exports.getUserByName = async (req, res) => {
     }
 }
 
-// define a router to register a user
+// define a function to register a user
 exports.register = async (req, res) => {
     const {
         username,
@@ -138,7 +138,7 @@ exports.register = async (req, res) => {
     }
 };
 
-// define a router to delete a user
+// define a function to delete a user
 exports.deleteUser = async (req, res) => {
     try {
         const deletedUser = await User.delete(+req.params.id);
@@ -162,7 +162,7 @@ exports.deleteUser = async (req, res) => {
     }
 };
 
-// define a router to update a student
+// define a function to update a student
 exports.updateUser = async (req, res) => {
     const { username, address, phone_number } = req.body;
     const user_id = +req.params.id;
