@@ -1,29 +1,33 @@
-import React, {useState} from 'react';
-import {useGetUserByIdQuery, useUpdateUserMutation} from "../store/api/userApi";
+import React, {useState, useEffect} from 'react';
+import {useDispatch, useSelector} from "react-redux";
+import {fetchUserById, updateUser} from "../store/reducer/userSlice";
 import styles from "./Profile.module.css";
 
-
 const Profile = () => {
+    const dispatch = useDispatch();
     const user = JSON.parse(localStorage.getItem('user'));
     const userId = user ? user.user_id : null;
-    const {data: userData, isLoading, refetch} = useGetUserByIdQuery(userId);
-    const [updateUser] = useUpdateUserMutation();
+    const userData = useSelector(state => state.users.selectedUser);
+    const isLoading = useSelector(state => state.users.status === 'loading');
 
     const [showModal, setShowModal] = useState(false);
     const [editedData, setEditedData] = useState({});
 
-    const handleEdit = async () => {
-        setEditedData(userData.data);
+    useEffect(() => {
+        if (userId) {
+            dispatch(fetchUserById(userId));
+        }
+    }, [userId, dispatch]);
+
+    const handleEdit = () => {
+        setEditedData(userData);
         setShowModal(true);
     }
 
     const handleSave = async () => {
         try {
-            const result = await updateUser({id: userId, ...editedData});
-            if (result.data) {
-                await refetch();
-                setShowModal(false);
-            }
+            await dispatch(updateUser({id: userId, ...editedData}));
+            setShowModal(false);
         } catch (err) {
             console.error("Failed to update user: ", err);
         }

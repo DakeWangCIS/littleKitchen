@@ -1,45 +1,60 @@
 import React, {useEffect, useState} from 'react';
-import {useGetUserByIdQuery, useGetUsersQuery, useUpdateUserMutation, useDeleteUserMutation} from "../store/api/userApi";
+import {useDispatch, useSelector} from "react-redux";
+import {fetchUsers, fetchUserById, updateUser, deleteUser} from "../store/reducer/userSlice";
 import styles from "./UsersForm.module.css";
 
 const UsersForm = () => {
+    const dispatch = useDispatch();
+    const users = useSelector(state => state.users.users);
+    const isLoading = useSelector(state => state.users.status === 'loading');
+    const error = useSelector(state => state.users.error);
+    const data = useSelector(state => state.users.users);
+    const editingUserData = useSelector(state => state.users.selectedUser);
+    console.log("Editing user data from state:", editingUserData); // Add this line
+
     const [formData, setFormData] = useState({});
     const [editingUserId, setEditingUserId] = useState(null);
     const [deleteConfirm, setDeleteConfirm] = useState(null);
-    const { data, error, isLoading, refetch } = useGetUsersQuery();
-    const [updateUser, {error: updateError}] = useUpdateUserMutation();
-    const {data: editingUserData} = useGetUserByIdQuery(editingUserId, {
-        skip: editingUserId === null,
-    });
-    const [deleteUser, {error: deleteError}] = useDeleteUserMutation();
 
     useEffect(() => {
-        refetch();
-    }, []);
+        if (editingUserId) {
+            console.log("Editing user ID:", editingUserId);
+            dispatch(fetchUserById(editingUserId));
+        }
+    }, [editingUserId, dispatch]);
 
     useEffect(() => {
-        if (editingUserData && editingUserData.data) {
-            setFormData(editingUserData.data);
+        console.log("Editing user data:", editingUserData);
+        if (editingUserData && editingUserData.data) { // Check for editingUserData.data here
+            setFormData({
+                username: editingUserData.data.username,
+                email: editingUserData.data.email,
+                address: editingUserData.data.address,
+                phone_number: editingUserData.data.phone_number
+            });
         }
     }, [editingUserData]);
 
-    useEffect(() => {
-        if (error) {
-            console.error("API Error:", error);
-        }
-    }, [error]);
 
+
+    useEffect(() => {
+        dispatch(fetchUsers());
+    }, []);
+
+    useEffect(() => {
+        if (editingUserId) {
+            dispatch(fetchUserById(editingUserId));
+        }
+    }, [editingUserId, dispatch]);
 
     const handleEdit = async () => {
-        const updatedUser = {};
-        await updateUser({id: editingUserId, ...updatedUser});
-        await refetch();
+        dispatch(updateUser({id: editingUserId, ...formData}));
         setEditingUserId(null);
+        setFormData({}); // Reset formData after editing
     }
 
     const handleDelete = async () => {
-        await deleteUser(deleteConfirm);
-        await refetch();
+        dispatch(deleteUser(deleteConfirm));
         setDeleteConfirm(null);
     }
 
@@ -61,9 +76,7 @@ const UsersForm = () => {
     return (
         <div className={styles.container}>
             {isLoading && <div>Loading...</div>}
-            {error && <div>Error loading users: {error.message}</div>}
-            {updateError && <div>Error updating user: {updateError.message}</div>}
-            {deleteError && <div>Error deleting user: {deleteError.message}</div>}
+            {error && <div>Error: {error}</div>}
             {data && (
                 <table className={styles.table}>
                     <thead>
@@ -95,9 +108,11 @@ const UsersForm = () => {
                                     <button
                                         className={styles.btnPrimary}
                                         style={{marginRight: '8px'}}
-                                        onClick={() => setEditingUserId(user.user_id)}>Edit</button>
+                                        onClick={() => setEditingUserId(user.user_id)}>Edit
+                                    </button>
                                     <button className={styles.btnDanger}
-                                            onClick={() => setDeleteConfirm(user.user_id)}>Delete</button>
+                                            onClick={() => setDeleteConfirm(user.user_id)}>Delete
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -113,14 +128,18 @@ const UsersForm = () => {
                         <div className={styles.modalContent}>
                             <div className={styles.modalHeader}>
                                 <h5 className={styles.modalTitle}>Confirm Delete</h5>
-                                <button type="button" className={styles.btnClose} onClick={() => setDeleteConfirm(null)}></button>
+                                <button type="button" className={styles.btnClose}
+                                        onClick={() => setDeleteConfirm(null)}/>
                             </div>
                             <div className={styles.modalBody}>
                                 <p>Are you sure you want to delete this user?</p>
                             </div>
                             <div className={styles.modalFooter}>
-                                <button type="button" className={styles.btnSecondary} onClick={() => setDeleteConfirm(null)}>Cancel</button>
-                                <button type="button" className={styles.btnDanger} onClick={handleDelete}>Confirm</button>
+                                <button type="button" className={styles.btnSecondary}
+                                        onClick={() => setDeleteConfirm(null)}>Cancel
+                                </button>
+                                <button type="button" className={styles.btnDanger} onClick={handleDelete}>Confirm
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -133,7 +152,10 @@ const UsersForm = () => {
                         <div className={styles.modalContent}>
                             <div className={styles.modalHeader}>
                                 <h5 className={styles.modalTitle}>Edit User</h5>
-                                <button type="button" className={styles.btnClose} onClick={() => setEditingUserId(null)}></button>
+                                <button type="button" className={styles.btnClose} onClick={() => {
+                                    setEditingUserId(null);
+                                    setFormData({});
+                                }}/>
                             </div>
                             <div className={styles.modalBody}>
                                 {editingUserData && (
@@ -144,7 +166,10 @@ const UsersForm = () => {
                                             {/*username, email, address, phone_number*/}
                                             <input type={"text"} className={styles.formControl} id={"username"}
                                                    value={formData.username || ''}
-                                                   onChange={(e) => setFormData({...formData, username: e.target.value})}
+                                                   onChange={(e) => setFormData({
+                                                       ...formData,
+                                                       username: e.target.value
+                                                   })}
                                             />
                                             <label htmlFor="email" className={styles.formLabel}>Email:</label>
                                             <input type={"text"} className={styles.formControl} id={"email"}
@@ -156,18 +181,25 @@ const UsersForm = () => {
                                                    value={formData.address || ''}
                                                    onChange={(e) => setFormData({...formData, address: e.target.value})}
                                             />
-                                            <label htmlFor="phone_number" className={styles.formLabel}>Phone Number:</label>
+                                            <label htmlFor="phone_number" className={styles.formLabel}>Phone
+                                                Number:</label>
                                             <input type={"text"} className={styles.formControl} id={"phone_number"}
                                                    value={formData.phone_number || ''}
-                                                   onChange={(e) => setFormData({...formData, phone_number: e.target.value})}
+                                                   onChange={(e) => setFormData({
+                                                       ...formData,
+                                                       phone_number: e.target.value
+                                                   })}
                                             />
                                         </div>
                                     </form>
                                 )}
                             </div>
                             <div className={styles.modalFooter}>
-                                <button type="button" className={styles.btnSecondary} onClick={() => setEditingUserId(null)}>Close</button>
-                                <button type="button" className={styles.btnPrimary} onClick={handleEdit}>Save changes</button>
+                                <button type="button" className={styles.btnSecondary}
+                                        onClick={() => setEditingUserId(null)}>Close
+                                </button>
+                                <button type="button" className={styles.btnPrimary} onClick={handleEdit}>Save changes
+                                </button>
                             </div>
                         </div>
                     </div>
