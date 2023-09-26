@@ -13,6 +13,18 @@ class ItemModel {
         }
     }
 
+    // query the database for a dish with the given id
+    static async findOneById(id) {
+        try {
+            const [rows] = await dbPool.execute('SELECT * FROM item WHERE item_id = ?', [id]);
+            if (rows.length === 0) return null;
+            return rows[0];
+        } catch (e) {
+            e.message = `Error in method findOneById(): ${e.message}`;
+            throw e;
+        }
+    }
+
     // query the database for all dishes
     static async findAll() {
         try {

@@ -47,6 +47,29 @@ exports.getCategoryByName = async (req, res) => {
     }
 }
 
+// define a function to retrieve a category's information by id
+exports.getCategoryById = async (req, res) => {
+    try {
+        const category = await Category.findOneById(req.params.id);
+        if (!category) {
+            return res.status(404).send({
+                status: "error",
+                message: "Category not found."
+            });
+        }
+        res.send({
+            status: "ok",
+            data: category
+        });
+    } catch (e) {
+        console.error('Error occurred during query:', e);
+        res.status(500).send({
+            status: "error",
+            message: "Error occurred during query."
+        });
+    }
+}
+
 // define a function to add a new category
 exports.addCategory = async (req, res) => {
     try {

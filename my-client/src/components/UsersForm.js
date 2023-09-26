@@ -10,7 +10,6 @@ const UsersForm = () => {
     const error = useSelector(state => state.users.error);
     const data = useSelector(state => state.users.users);
     const editingUserData = useSelector(state => state.users.selectedUser);
-    console.log("Editing user data from state:", editingUserData); // Add this line
 
     const [formData, setFormData] = useState({});
     const [editingUserId, setEditingUserId] = useState(null);
@@ -18,13 +17,11 @@ const UsersForm = () => {
 
     useEffect(() => {
         if (editingUserId) {
-            console.log("Editing user ID:", editingUserId);
             dispatch(fetchUserById(editingUserId));
         }
     }, [editingUserId, dispatch]);
 
     useEffect(() => {
-        console.log("Editing user data:", editingUserData);
         if (editingUserData && editingUserData.data) { // Check for editingUserData.data here
             setFormData({
                 username: editingUserData.data.username,
@@ -34,8 +31,6 @@ const UsersForm = () => {
             });
         }
     }, [editingUserData]);
-
-
 
     useEffect(() => {
         dispatch(fetchUsers());

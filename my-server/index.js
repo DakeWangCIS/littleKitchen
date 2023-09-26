@@ -2,11 +2,11 @@ const express = require('express');
 const app = express();
 const PORT = 3001;
 const cors = require('cors');
-const userRoutes = require('./my-server/routers/usersRoutes');
-const loginRoutes = require('./my-server/routers/loginRoutes');
-const itemRoutes = require('./my-server/routers/itemRoutes');
-const categoryRoutes = require('./my-server/routers/categoryRoutes');
-const authenticateToken = require('./my-server/middleware/authenticateToken');
+const userRoutes = require('./routers/usersRoutes');
+const loginRoutes = require('./routers/loginRoutes');
+const itemRoutes = require('./routers/itemRoutes');
+const categoryRoutes = require('./routers/categoryRoutes');
+const authenticateToken = require('./middleware/authenticateToken');
 
 const corsOptions = {
     origin: '*',

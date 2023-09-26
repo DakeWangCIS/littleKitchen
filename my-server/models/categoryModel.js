@@ -12,6 +12,17 @@ class CategoryModel {
         }
     }
 
+    // Get a category by its id
+    static async findOneById(id) {
+        try {
+            const [rows] = await dbPool.execute('SELECT * FROM category WHERE category_id = ?', [id]);
+            return rows[0];
+        } catch (e) {
+            e.message = `Error in method findById(): ${e.message}`;
+            throw e;
+        }
+    }
+
     // Get all categories from the database
     static async findAll() {
         try {

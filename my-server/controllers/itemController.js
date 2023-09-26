@@ -52,6 +52,29 @@ exports.getItemByName = async (req, res) => {
     }
 }
 
+// define a function to retrieve an item's information by id
+exports.getItemById = async (req, res) => {
+    try {
+        const item = await Item.findOneById(req.params.id);
+        if (!item) {
+            return res.status(404).send({
+                status: "error",
+                message: "Item not found."
+            });
+        }
+        res.send({
+            status: "ok",
+            data: item
+        });
+    } catch (e) {
+        console.error('Error occurred during query:', e);
+        res.status(500).send({
+            status: "error",
+            message: "Error occurred during query."
+        });
+    }
+}
+
 // define a function to retrieve items' information by category
 exports.getItemsByCategory = async (req, res) => {
     try {
