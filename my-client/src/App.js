@@ -10,6 +10,7 @@ import OffersPage from "./pages/OffersPage";
 import MenusPage from "./pages/MenusPage";
 import 'semantic-ui-css/semantic.min.css';
 import './App.css';
+import AdminEntrancePage from "./pages/AdminEntrancePage";
 
 const App = () => {
     return (
@@ -19,12 +20,15 @@ const App = () => {
                 <Route path={"/profile"} element={
                     <NeedAuth><ProfilePage/></NeedAuth>
                 }/>
-                <Route path={"auth-form"} element={<AuthPage/>}/>
+                <Route path={"/auth-form"} element={<AuthPage/>}/>
                 <Route path={"/all-users"} element={
                     <NeedAuth requireAdmin={true}><UsersPage/></NeedAuth>
                 }/>
                 <Route path={"/offers"} element={<OffersPage/>}/>
                 <Route path={"/menus"} element={<MenusPage/>}/>
+                <Route path={"/admin-entrance"} element={
+                    <NeedAuth requireAdmin={true}><AdminEntrancePage/></NeedAuth>
+                }/>
             </Routes>
         </Layout>
     );

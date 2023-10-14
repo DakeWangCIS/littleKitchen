@@ -36,13 +36,18 @@
 }
 
 .btnPrimary {
-    background-color: #007bff;
+    background-color: #f2711c;
     color: white;
+    border: 1px solid black;
+    box-shadow:2px 2px 5px #000;
+    margin-right: 8px;
 }
 
 .btnDanger {
     background-color: #dc3545;
     color: white;
+    border: 1px solid black;
+    box-shadow:2px 2px 5px #000;
 }
 
 .btnSecondary {
@@ -61,6 +66,21 @@
     justify-content: center;
     align-items: center;
     z-index: 1000;
+}
+
+.modalBody {
+    width: 100%;
+    max-width: 600px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.modalBody p {
+    margin: 0;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
 }
 
 .modalDialog {
@@ -82,7 +102,8 @@
 }
 
 .modalTitle {
-    margin: 0;
+    font-size: 20px;
+    margin-bottom: 10px;
 }
 
 .btnClose {
@@ -94,6 +115,11 @@
     justify-content: center;
     align-items: center;
     border-radius: 50%;
+    cursor: pointer;
+}
+
+.dFlex button:hover {
+    opacity: 0.8;
     cursor: pointer;
 }
 
@@ -113,9 +139,33 @@
 .formLabel {
     display: block;
     margin-bottom: 5px;
+    margin-left: 0;
+    padding-left: 0;
 }
 
 .dFlex {
     display: flex;
     align-items: center;
+}
+
+.tableTopControls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.leftControls, .rightControls {
+    display: flex;
+    align-items: center;
+}
+
+.tableBottomControls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+span {
+    font-size: 16px;
 }

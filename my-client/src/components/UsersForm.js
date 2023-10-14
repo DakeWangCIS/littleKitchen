@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {fetchUsers, fetchUserById, updateUser, deleteUser} from "../store/reducer/userSlice";
 import styles from "./UsersForm.module.css";
+import { Table, Pagination, Input } from 'semantic-ui-react';
+
 
 const UsersForm = () => {
     const dispatch = useDispatch();
@@ -14,6 +16,41 @@ const UsersForm = () => {
     const [formData, setFormData] = useState({});
     const [editingUserId, setEditingUserId] = useState(null);
     const [deleteConfirm, setDeleteConfirm] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [sortColumn, setSortColumn] = useState(null);
+    const [sortDirection, setSortDirection] = useState(null);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
+
+
+    // 根据当前的状态处理用户数据
+    const getDisplayedUsers = () => {
+        let filteredUsers = [...users];
+
+        // 搜索
+        if (searchTerm) {
+            filteredUsers = filteredUsers.filter(user =>
+                user.username.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        }
+
+        // 排序 (此处为示例，您可以根据需要进行调整)
+        if (sortColumn) {
+            filteredUsers.sort((a, b) => {
+                if (sortDirection === 'ascending') {
+                    return a[sortColumn] > b[sortColumn] ? 1 : -1;
+                } else {
+                    return a[sortColumn] < b[sortColumn] ? 1 : -1;
+                }
+            });
+        }
+
+        // 分页
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        return filteredUsers.slice(startIndex, startIndex + itemsPerPage);
+    };
+
+    const displayedUsers = getDisplayedUsers();
 
     useEffect(() => {
         if (editingUserId) {
@@ -70,51 +107,188 @@ const UsersForm = () => {
 
     return (
         <div className={styles.container}>
+            <div className={styles.tableTopControls}>
+                <div className={styles.leftControls}>
+                    <span>Show&nbsp;</span>
+                    <select
+                        value={itemsPerPage}
+                        onChange={e => setItemsPerPage(Number(e.target.value))}
+                    >
+                        <option value={10}>10</option>
+                        <option value={25}>25</option>
+                        <option value={50}>50</option>
+                        <option value={100}>100</option>
+                    </select>
+                    <span>&nbsp;entries</span>
+                </div>
+                <div className={styles.rightControls}>
+                    <span>Search:&nbsp;</span>
+                    <Input
+                        icon="search"
+                        placeholder="Search..."
+                        value={searchTerm}
+                        onChange={e => setSearchTerm(e.target.value)}
+                    />
+                </div>
+            </div>
+
             {isLoading && <div>Loading...</div>}
             {error && <div>Error: {error}</div>}
             {data && (
-                <table className={styles.table}>
-                    <thead>
-                    <tr>
-                        <th style={{width: '100px'}}>User ID</th>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th style={{width: '160px'}}>Phone Number</th>
-                        <th>Address</th>
-                        <th>Created Date</th>
-                        <th>Last-login Date</th>
-                        <th style={{width: '50px'}}>Admin</th>
-                        <th style={{paddingLeft: 40}}>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {data.map((user, index) => (
-                        <tr key={index}>
-                            <td>{user.user_id}</td>
-                            <td>{user.username}</td>
-                            <td>{user.email}</td>
-                            <td>{user.phone_number}</td>
-                            <td>{user.address}</td>
-                            <td>{dateInPacificTime(user.create_date)}</td>
-                            <td>{dateInPacificTime(user.last_login_date)}</td>
-                            <td>{user.is_admin ? 'Yes' : 'No'}</td>
-                            <td>
-                                <div className={styles.dFlex}>
-                                    <button
-                                        className={styles.btnPrimary}
-                                        style={{marginRight: '8px'}}
-                                        onClick={() => setEditingUserId(user.user_id)}>Edit
-                                    </button>
-                                    <button className={styles.btnDanger}
-                                            onClick={() => setDeleteConfirm(user.user_id)}>Delete
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    ))}
-                    </tbody>
-                </table>
+                <Table sortable celled>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell
+                                sorted={sortColumn === 'user_id' ? sortDirection : null}
+                                onClick={() => {
+                                    if (sortColumn === 'user_id') {
+                                        setSortDirection(sortDirection === 'ascending' ? 'descending' : 'ascending');
+                                    } else {
+                                        setSortColumn('user_id');
+                                        setSortDirection('ascending');
+                                    }
+                                }}
+                            >
+                                User ID
+                            </Table.HeaderCell>
+                            <Table.HeaderCell
+                                sorted={sortColumn === 'username' ? sortDirection : null}
+                                onClick={() => {
+                                    if (sortColumn === 'username') {
+                                        setSortDirection(sortDirection === 'ascending' ? 'descending' : 'ascending');
+                                    } else {
+                                        setSortColumn('username');
+                                        setSortDirection('ascending');
+                                    }
+                                }}
+                            >
+                                Username
+                            </Table.HeaderCell>
+                            <Table.HeaderCell
+                                sorted={sortColumn === 'email' ? sortDirection : null}
+                                onClick={() => {
+                                    if (sortColumn === 'email') {
+                                        setSortDirection(sortDirection === 'ascending' ? 'descending' : 'ascending');
+                                    } else {
+                                        setSortColumn('email');
+                                        setSortDirection('ascending');
+                                    }
+                                }}
+                            >
+                                Email
+                            </Table.HeaderCell>
+                            <Table.HeaderCell
+                                sorted={sortColumn === 'phone_number' ? sortDirection : null}
+                                onClick={() => {
+                                    if (sortColumn === 'phone_number') {
+                                        setSortDirection(sortDirection === 'ascending' ? 'descending' : 'ascending');
+                                    } else {
+                                        setSortColumn('phone_number');
+                                        setSortDirection('ascending');
+                                    }
+                                }}
+                            >
+                                Phone Number
+                            </Table.HeaderCell>
+                            <Table.HeaderCell
+                                sorted={sortColumn === 'address' ? sortDirection : null}
+                                onClick={() => {
+                                    if (sortColumn === 'address') {
+                                        setSortDirection(sortDirection === 'ascending' ? 'descending' : 'ascending');
+                                    } else {
+                                        setSortColumn('address');
+                                        setSortDirection('ascending');
+                                    }
+                                }}
+                            >
+                                Address
+                            </Table.HeaderCell>
+                            <Table.HeaderCell
+                                sorted={sortColumn === 'create_date' ? sortDirection : null}
+                                onClick={() => {
+                                    if (sortColumn === 'create_date') {
+                                        setSortDirection(sortDirection === 'ascending' ? 'descending' : 'ascending');
+                                    } else {
+                                        setSortColumn('create_date');
+                                        setSortDirection('ascending');
+                                    }
+                                }}
+                            >
+                                Created Date
+                            </Table.HeaderCell>
+                            <Table.HeaderCell
+                                sorted={sortColumn === 'last_login_date' ? sortDirection : null}
+                                onClick={() => {
+                                    if (sortColumn === 'last_login_date') {
+                                        setSortDirection(sortDirection === 'ascending' ? 'descending' : 'ascending');
+                                    } else {
+                                        setSortColumn('last_login_date');
+                                        setSortDirection('ascending');
+                                    }
+                                }}
+                            >
+                                Last-login Date
+                            </Table.HeaderCell>
+                            <Table.HeaderCell
+                                sorted={sortColumn === 'is_admin' ? sortDirection : null}
+                                onClick={() => {
+                                    if (sortColumn === 'is_admin') {
+                                        setSortDirection(sortDirection === 'ascending' ? 'descending' : 'ascending');
+                                    } else {
+                                        setSortColumn('is_admin');
+                                        setSortDirection('ascending');
+                                    }
+                                }}
+                            >
+                                Admin
+                            </Table.HeaderCell>
+                            <Table.HeaderCell>
+                                Actions
+                            </Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                        {displayedUsers.map((user, index) => (
+                            <Table.Row key={index}>
+                                <Table.Cell>{user.user_id}</Table.Cell>
+                                <Table.Cell>{user.username}</Table.Cell>
+                                <Table.Cell>{user.email}</Table.Cell>
+                                <Table.Cell>{user.phone_number}</Table.Cell>
+                                <Table.Cell>{user.address}</Table.Cell>
+                                <Table.Cell>{dateInPacificTime(user.create_date)}</Table.Cell>
+                                <Table.Cell>{dateInPacificTime(user.last_login_date)}</Table.Cell>
+                                <Table.Cell>{user.is_admin ? 'Yes' : 'No'}</Table.Cell>
+                                <Table.Cell>
+                                    <div className={styles.dFlex}>
+                                        <button
+                                            className={styles.btnPrimary}
+                                            onClick={() => setEditingUserId(user.user_id)}>Edit
+                                        </button>
+                                        <button className={styles.btnDanger}
+                                                onClick={() => setDeleteConfirm(user.user_id)}>Delete
+                                        </button>
+                                    </div>
+                                </Table.Cell>
+                            </Table.Row>
+                        ))}
+                    </Table.Body>
+                </Table>
             )}
+            <div className={styles.tableBottomControls}>
+                <div className={styles.leftControls}>
+                <span>
+                    Showing {(currentPage - 1) * itemsPerPage + 1} to&nbsp;
+                    {Math.min(currentPage * itemsPerPage, users.length)} of {users.length} entries
+                </span>
+                </div>
+                <div className={styles.rightControls}>
+                    <Pagination
+                        totalPages={Math.ceil(users.length / itemsPerPage)}
+                        activePage={currentPage}
+                        onPageChange={(e, { activePage }) => setCurrentPage(activePage)}
+                    />
+                </div>
+            </div>
 
             {/* delete confirmation modal */}
             {deleteConfirm !== null && (

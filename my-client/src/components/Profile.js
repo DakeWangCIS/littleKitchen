@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {fetchUserById, updateUser} from "../store/reducer/userSlice";
+import {deleteUser, fetchUserById, updateUser} from "../store/reducer/userSlice";
 import styles from "./Profile.module.css";
 
 const Profile = () => {
@@ -12,6 +12,7 @@ const Profile = () => {
 
     const [showModal, setShowModal] = useState(false);
     const [editedData, setEditedData] = useState({});
+    const [deleteConfirm, setDeleteConfirm] = useState(false);
 
     useEffect(() => {
         if (userId) {
@@ -20,8 +21,17 @@ const Profile = () => {
     }, [userId, dispatch]);
 
     const handleEdit = () => {
-        setEditedData(userData);
+        setEditedData(userData.data);
         setShowModal(true);
+    }
+
+    const handleDeleteConfirm = () => {
+        setDeleteConfirm(true);
+    }
+
+    const handleDelete = async () => {
+        dispatch(deleteUser(userId));
+        setDeleteConfirm(false);
     }
 
     const handleSave = async () => {
@@ -38,7 +48,7 @@ const Profile = () => {
     };
 
     return (
-        <div>
+        <div className={styles.container}>
             <h1>Profile</h1>
             {isLoading && <div>Loading...</div>}
             {userData && (
@@ -49,6 +59,7 @@ const Profile = () => {
                         <th>Email</th>
                         <th>Phone Number</th>
                         <th>Address</th>
+                        <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -58,7 +69,10 @@ const Profile = () => {
                         <td>{userData.data.phone_number}</td>
                         <td>{userData.data.address}</td>
                         <td>
-                            <button className={styles.btnPrimary} onClick={handleEdit}>Edit</button>
+                            <div className={styles.dFlex}>
+                                <button className={styles.btnPrimary} onClick={handleEdit}>Edit</button>
+                                <button className={styles.btnDanger} onClick={handleDeleteConfirm}>Delete</button>
+                            </div>
                         </td>
                     </tr>
                     </tbody>
@@ -102,6 +116,26 @@ const Profile = () => {
                             <div className={styles.modalFooter}>
                                 <button type="button" className={styles.btnSecondary} onClick={handleCancel}>Cancel</button>
                                 <button type="button" className={styles.btnPrimary} onClick={handleSave}>Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {deleteConfirm && (
+                <div className={styles.modal}>
+                    <div className={styles.modalDialog}>
+                        <div className={styles.modalContent}>
+                            <div className={styles.modalHeader}>
+                                <h5 className={styles.modalTitle}>Confirm Delete</h5>
+                                <button type="button" className={styles.btnClose} onClick={() => setDeleteConfirm(false)}></button>
+                            </div>
+                            <div className={styles.modalBody}>
+                                <p>Are you sure you want to delete your profile?</p>
+                            </div>
+                            <div className={styles.modalFooter}>
+                                <button type="button" className={styles.btnSecondary} onClick={() => setDeleteConfirm(false)}>Cancel</button>
+                                <button type="button" className={styles.btnDanger} onClick={handleDelete}>Confirm</button>
                             </div>
                         </div>
                     </div>
