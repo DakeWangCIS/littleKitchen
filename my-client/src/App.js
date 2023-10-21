@@ -24,6 +24,9 @@ const App = () => {
                 <Route path={"/all-users"} element={
                     <NeedAuth requireAdmin={true}><UsersPage/></NeedAuth>
                 }/>
+                <Route path={"/all-items"} element={
+                    <NeedAuth requireAdmin={true}><MenusPage/></NeedAuth>
+                }/>
                 <Route path={"/offers"} element={<OffersPage/>}/>
                 <Route path={"/menus"} element={<MenusPage/>}/>
                 <Route path={"/admin-entrance"} element={

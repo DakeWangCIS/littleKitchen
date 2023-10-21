@@ -1,24 +1,28 @@
-import {createSlice} from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+
+const initialState = {
+    isLogged: false,
+    token: null,
+    user: null,
+    is_admin: false
+};
+
+// 将localStorage的操作移到外部函数
+const loadStateFromLocalStorage = () => {
+    const token = localStorage.getItem('token');
+    if (!token) return initialState;
+
+    return {
+        isLogged: true,
+        token,
+        user: JSON.parse(localStorage.getItem('user')),
+        is_admin: JSON.parse(localStorage.getItem('user')).is_admin
+    };
+};
 
 export const authSlice = createSlice({
     name: 'auth',
-    initialState: () => {
-        const token = localStorage.getItem('token');
-        if(!token) {
-            return {
-                isLogged: false,
-                token: null,
-                user: null,
-                is_admin: false
-            };
-        }
-        return {
-            isLogged: true,
-            token,
-            user: JSON.parse(localStorage.getItem('user')),
-            is_admin: JSON.parse(localStorage.getItem('user')).is_admin
-        }
-    },
+    initialState: loadStateFromLocalStorage(),
     reducers: {
         login(state, action) {
             state.isLogged = true;
@@ -39,4 +43,4 @@ export const authSlice = createSlice({
     }
 });
 
-export const {login, logout} = authSlice.actions;
+export const { login, logout } = authSlice.actions;

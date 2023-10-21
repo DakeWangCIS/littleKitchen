@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {userApi} from "../api/userApi";
 
-// 异步操作：获取所有用户
+// get all users
 export const fetchUsers = createAsyncThunk(
     'users/fetchUsers',
     async (_, { dispatch }) => {
@@ -13,7 +13,7 @@ export const fetchUsers = createAsyncThunk(
     }
 );
 
-// 异步操作：根据ID获取用户
+// get user by id
 export const fetchUserById = createAsyncThunk(
     'users/fetchUserById',
     async (id, { dispatch }) => {
@@ -26,7 +26,7 @@ export const fetchUserById = createAsyncThunk(
     }
 );
 
-// 异步操作：更新用户
+// update user
 export const updateUser = createAsyncThunk(
     'users/updateUser',
     async (user, { dispatch }) => {
@@ -38,7 +38,7 @@ export const updateUser = createAsyncThunk(
     }
 );
 
-// 异步操作：删除用户
+// delete user
 export const deleteUser = createAsyncThunk(
     'users/deleteUser',
     async (id, { dispatch }) => {
@@ -50,7 +50,7 @@ export const deleteUser = createAsyncThunk(
     }
 );
 
-// 定义userSlice
+// define userSlice
 export const userSlice = createSlice({
     name: 'users',
     initialState: {
@@ -90,5 +90,5 @@ export const userSlice = createSlice({
     },
 });
 
-// 导出actions
-export const {} = userSlice.actions;
+// Export the reducer
+export const userReducer = userSlice.reducer;
